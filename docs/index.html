@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coverage Reports - BobApp</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; margin-bottom: 30px; }
+        .report-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        .report-section h2 { color: #555; margin-top: 0; }
+        .report-link { display: inline-block; padding: 10px 20px; background-color: #007cba; color: white; text-decoration: none; border-radius: 5px; margin: 10px 5px; }
+        .report-link:hover { background-color: #005a8b; }
+        .timestamp { text-align: center; color: #666; font-size: 0.9em; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 BobApp Coverage Reports</h1>
+        
+        <div class="report-section">
+            <h2>🔧 Backend Coverage (Java/Spring Boot)</h2>
+            <p>JaCoCo coverage report for the Java backend services.</p>
+            <a href="./backend/index.html" class="report-link">View Backend Coverage</a>
+        </div>
+        
+        <div class="report-section">
+            <h2>🌐 Frontend Coverage (Angular)</h2>
+            <p>Coverage report for the Angular frontend application.</p>
+            <a href="./frontend/index.html" class="report-link">View Frontend Coverage</a>
+        </div>
+        
+        <div class="timestamp">
+            Last updated: $(date)
+        </div>
+    </div>
+</body>
+</html>
