@@ -18,8 +18,7 @@ jobs:
           cache: "maven"
 
       - name: Build and Test with Maven (with JaCoCo)
-        run: mvn clean verify --file api/pom.xml # <- Use the correct path to your POM!
-        # The 'verify' phase runs the tests. JaCoCo is automatically triggered by the Maven lifecycle.
+        run: mvn clean verify --file back/pom.xml
 
       # NEW STEP: Upload JaCoCo Coverage Report
       - name: Upload JaCoCo coverage report
@@ -27,7 +26,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-report
-          path: api/target/site/jacoco/ # <- The path where JaCoCo generates the HTML report. UPDATE THE PATH!
+          path: back/target/site/jacoco/ # The report is generated in the 'back' directory
           retention-days: 5
 
   # JOB 2: Build and Test the Angular Frontend
