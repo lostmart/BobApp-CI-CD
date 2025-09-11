@@ -1,0 +1,11 @@
+name: CI/CD Pipeline
+
+on: [push] # This triggers the workflow on any push to the repository
+
+jobs:
+  explore-github-actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 Hello World! My first GitHub Action is working."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
