@@ -1,7 +1,7 @@
 <!-- Live GitHub Actions Workflow Badges -->
 
-[![Build Status](https://github.com/your-username/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/ci.yml)
-[![Tests](https://github.com/your-username/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml/badge.svg)](https://github.com/your-username/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml)
+[![Build Status](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/ci.yml)
+[![Tests](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml/badge.svg)](https://github.com/your-username/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml)
 
 # BobApp
 
