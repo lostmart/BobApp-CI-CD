@@ -18,7 +18,7 @@ jobs:
           cache: "maven" # Caches Maven dependencies to speed up future runs
 
       - name: Build and Test with Maven
-        run: mvn clean verify --file backend/pom.xml
+        run: mvn clean verify --file back/pom.xml
         # 'clean verify' compiles, runs tests, and packages the code.
         # '--file backend/pom.xml' tells Maven where the project is.
 
@@ -34,26 +34,27 @@ jobs:
         with:
           node-version: "18"
           cache: "npm"
-          cache-dependency-path: frontend/package-lock.json # Caches npm dependencies from the frontend dir
+          cache-dependency-path: front/package-lock.json # Caches npm dependencies from the frontend dir
 
       - name: Install dependencies (CI)
         run: npm ci
-        working-directory: ./frontend # All subsequent commands in this step will run from /frontend
+        working-directory: ./front
+        # All subsequent commands in this step will run from /frontend
         # 'npm ci' is faster and more strict than 'npm install', perfect for CI/CD
 
       - name: Run linting
         run: npm run lint
-        working-directory: ./frontend
+        working-directory: ./front
         # This runs the Angular linter (ng lint) to check code style.
 
       - name: Run tests (Headless)
         run: npm test -- --watch=false --browsers=ChromeHeadless
-        working-directory: ./frontend
+        working-directory: ./front
         # '--watch=false' runs tests once and exits.
         # '--browsers=ChromeHeadless' runs tests without a GUI, which is necessary on a server.
 
       - name: Build for production
         run: npm run build -- --configuration production
-        working-directory: ./frontend
+        working-directory: ./front
         # This is the ultimate test: can the project compile for production?
-        # The output will be in 'frontend/dist/'
+        # The output will be in 'front/dist/'
