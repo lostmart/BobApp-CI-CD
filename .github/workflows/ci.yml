@@ -20,14 +20,46 @@ jobs:
       - name: Build and Test with Maven (with JaCoCo)
         run: mvn clean verify --file back/pom.xml
 
-      # NEW STEP: Upload JaCoCo Coverage Report
+      # Generate JaCoCo Coverage Report
+      - name: Generate JaCoCo Badge
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: back/target/site/jacoco/jacoco.csv
+
+      # Upload JaCoCo Coverage Report as Artifact
       - name: Upload JaCoCo coverage report
         if: always() # Upload the report even if tests fail
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-coverage-report
-          path: back/target/site/jacoco/ # The report is generated in the 'back' directory
-          retention-days: 5
+          path: back/target/site/jacoco/
+          retention-days: 30
+
+      # Add Coverage Comment to PR
+      - name: Add coverage to PR
+        id: jacoco-report
+        uses: PavanMudigonda/jacoco-reporter@v4.8
+        if: github.event_name == 'pull_request'
+        with:
+          coverage_results_path: back/target/site/jacoco/jacoco.xml
+          coverage_report_name: Backend Coverage
+          coverage_report_title: JaCoCo Backend Coverage Report
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          skip_check_run: false
+          minimum_coverage: 80
+          fail_below_threshold: false
+          publish_only_summary: false
+
+      # Upload coverage to Codecov (optional but recommended)
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: back/target/site/jacoco/jacoco.xml
+          flags: backend
+          name: backend-coverage
+          fail_ci_if_error: false
 
   # JOB 2: Build and Test the Angular Frontend
   build-and-test-frontend:
@@ -53,19 +85,126 @@ jobs:
         run: npm ci
         working-directory: ./front
 
-      - name: Run Tests (Headless)
-        run: npm test -- --watch=false --browsers=ChromeHeadless
+      # Update karma config to generate coverage reports
+      - name: Run Tests with Coverage (Headless)
+        run: npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
         working-directory: ./front
 
       - name: Build for production
         run: npm run build -- --configuration production
         working-directory: ./front
 
-      # Optional: Upload test coverage report
-      - name: Upload coverage report artifact
+      # Upload Angular test coverage report
+      - name: Upload Angular coverage report artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: angular-coverage-report
           path: front/coverage/
-          retention-days: 5
+          retention-days: 30
+
+      # Add Angular Coverage Comment to PR
+      - name: Add Angular coverage to PR
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        if: github.event_name == 'pull_request'
+        with:
+          lcov-file: front/coverage/lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          title: Frontend Coverage Report
+
+      # Upload frontend coverage to Codecov
+      - name: Upload frontend coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: front/coverage/lcov.info
+          flags: frontend
+          name: frontend-coverage
+          fail_ci_if_error: false
+
+  # JOB 3: Generate Combined Coverage Report and Deploy to GitHub Pages
+  deploy-coverage-report:
+    runs-on: ubuntu-latest
+    needs: [build-and-test-backend, build-and-test-frontend]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Download both coverage reports
+      - name: Download backend coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: jacoco-coverage-report
+          path: coverage-reports/backend
+
+      - name: Download frontend coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: angular-coverage-report
+          path: coverage-reports/frontend
+
+      # Create a combined HTML page
+      - name: Create combined coverage index
+        run: |
+          mkdir -p public
+          cat > public/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Coverage Reports - BobApp</title>
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 40px; background-color: #f5f5f5; }
+                  .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                  h1 { color: #333; text-align: center; margin-bottom: 30px; }
+                  .report-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+                  .report-section h2 { color: #555; margin-top: 0; }
+                  .report-link { display: inline-block; padding: 10px 20px; background-color: #007cba; color: white; text-decoration: none; border-radius: 5px; margin: 10px 5px; }
+                  .report-link:hover { background-color: #005a8b; }
+                  .timestamp { text-align: center; color: #666; font-size: 0.9em; margin-top: 30px; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1>🎯 BobApp Coverage Reports</h1>
+                  
+                  <div class="report-section">
+                      <h2>🔧 Backend Coverage (Java/Spring Boot)</h2>
+                      <p>JaCoCo coverage report for the Java backend services.</p>
+                      <a href="./backend/index.html" class="report-link">View Backend Coverage</a>
+                  </div>
+                  
+                  <div class="report-section">
+                      <h2>🌐 Frontend Coverage (Angular)</h2>
+                      <p>Coverage report for the Angular frontend application.</p>
+                      <a href="./frontend/index.html" class="report-link">View Frontend Coverage</a>
+                  </div>
+                  
+                  <div class="timestamp">
+                      Last updated: $(date)
+                  </div>
+              </div>
+          </body>
+          </html>
+          EOF
+
+          # Copy coverage reports
+          cp -r coverage-reports/* public/
+
+      # Deploy to docs folder (alternative approach)
+      - name: Deploy to docs folder
+        run: |
+          # Remove existing docs folder and recreate
+          rm -rf docs
+          mkdir -p docs
+          cp -r public/* docs/
+
+      # Commit and push to main branch
+      - name: Commit coverage reports
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/
+          git commit -m "Update coverage reports" || exit 0
+          git push
