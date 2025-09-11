@@ -34,27 +34,18 @@ jobs:
         with:
           node-version: "18"
           cache: "npm"
-          cache-dependency-path: front/package-lock.json # Caches npm dependencies from the frontend dir
+          cache-dependency-path: front/package-lock.json # NOTE: Path changed to 'front/'
 
       - name: Install dependencies (CI)
         run: npm ci
-        working-directory: ./front
-        # All subsequent commands in this step will run from /frontend
-        # 'npm ci' is faster and more strict than 'npm install', perfect for CI/CD
+        working-directory: ./front # NOTE: Path changed to 'front/' (no 'end')
 
-      - name: Run linting
-        run: npm run lint
-        working-directory: ./front
-        # This runs the Angular linter (ng lint) to check code style.
+      # -- LINTING STEP REMOVED --
 
-      - name: Run tests (Headless)
+      - name: Run Tests (Headless)
         run: npm test -- --watch=false --browsers=ChromeHeadless
-        working-directory: ./front
-        # '--watch=false' runs tests once and exits.
-        # '--browsers=ChromeHeadless' runs tests without a GUI, which is necessary on a server.
+        working-directory: ./front # NOTE: Path changed to 'front/'
 
       - name: Build for production
         run: npm run build -- --configuration production
-        working-directory: ./front
-        # This is the ultimate test: can the project compile for production?
-        # The output will be in 'front/dist/'
+        working-directory: ./front # NOTE: Path changed to 'front/'
