@@ -3,6 +3,9 @@
 [![Build Status](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/ci.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/ci.yml)
 [![Tests](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml)
 
+[![Backend Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lostmart/YOUR_GIST_ID/raw/jacoco.json)](https://lostmart.github.io/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/)
+[![Frontend Coverage](https://img.shields.io/codecov/c/github/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD)](https://codecov.io/gh/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD)
+
 # BobApp
 
 Clone project:
