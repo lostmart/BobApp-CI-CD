@@ -6,6 +6,21 @@ jobs:
   explore-github-actions:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 Hello World! My first GitHub Action is working."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      # Step 1: Checkout the code (Essential for any real CI job)
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Print debug messages
+      - name: Debug Information
+        run: |
+          echo "🎉 Hello World! My first GitHub Action is working."
+          echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+          echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+      # Step 3: This is an example of a smoke test step.
+      # NOTE: This will FAIL because there's nothing running on localhost!
+      # This is just to show the correct syntax.
+      - name: Example Smoke Test (Will Fail)
+        run: |
+          echo "Testing if frontend is available..."
+          curl -f -I http://localhost:80 || echo "Curl command failed as expected. (Nothing is running on localhost inside this runner)"

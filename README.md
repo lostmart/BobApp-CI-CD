@@ -1,10 +1,15 @@
+<!-- Live GitHub Actions Workflow Badges -->
+
+[![Build Status](https://github.com/your-username/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/ci.yml)
+[![Tests](https://github.com/your-username/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml/badge.svg)](https://github.com/your-username/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml)
+
 # BobApp
 
 Clone project:
 
 > git clone XXXXX
 
-## Front-end 
+## Front-end
 
 Go inside folder the front folder:
 
@@ -22,7 +27,7 @@ Launch Front-end:
 
 Build the container:
 
-> docker build -t bobapp-front .  
+> docker build -t bobapp-front .
 
 Start the container:
 
@@ -40,7 +45,7 @@ Install dependencies:
 
 Launch Back-end:
 
->  mvn spring-boot:run
+> mvn spring-boot:run
 
 Launch the tests:
 
@@ -50,8 +55,8 @@ Launch the tests:
 
 Build the container:
 
-> docker build -t bobapp-back .  
+> docker build -t bobapp-back .
 
 Start the container:
 
-> docker run -p 8080:8080 --name bobapp-back -d bobapp-back 
+> docker run -p 8080:8080 --name bobapp-back -d bobapp-back
