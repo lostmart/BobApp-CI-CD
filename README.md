@@ -12,6 +12,8 @@ Clone project:
 
 > git clone XXXXX
 
+one of the ùmain issues
+
 ## Front-end
 
 Go inside folder the front folder:
