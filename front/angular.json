@@ -89,7 +89,6 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "codeCoverage": true,
-            "browsers": ["ChromeHeadless"],
             "codeCoverageExclude": [
               "src/test.ts",
               "src/**/*.spec.ts",
