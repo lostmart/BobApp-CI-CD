@@ -46,7 +46,7 @@ jobs:
         working-directory: ./front
         run: npm ci
 
-      - name: Run Frontend Tests
+      - name: Run Frontend Tests (Angular)
         working-directory: ./front
         run: npm run test:coverage
 
