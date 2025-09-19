@@ -7,19 +7,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.openclassrooms.bobapp.service.JokeService;
 
+
+
 @RestController
 @RequestMapping(&quot;api/joke&quot;)
 public class JokeController {
 
     private final JokeService jokeService;
 
-<span class="fc" id="L16">    JokeController(JokeService jokeService) {</span>
-<span class="fc" id="L17">        this.jokeService = jokeService;</span>
-<span class="fc" id="L18">    }</span>
+
+    
+<span class="fc" id="L20">    JokeController(JokeService jokeService) {</span>
+<span class="fc" id="L21">        this.jokeService = jokeService;</span>
+<span class="fc" id="L22">    }</span>
 
     @GetMapping()
     public ResponseEntity&lt;?&gt; getRandomJokes() {
-<span class="fc" id="L22">        return ResponseEntity.ok(this.jokeService.getRandomJoke());</span>
+<span class="fc" id="L26">        return ResponseEntity.ok(this.jokeService.getRandomJoke());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
