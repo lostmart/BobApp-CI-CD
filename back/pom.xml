@@ -48,21 +48,16 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
+				<version>0.8.11</version>
+				 <configuration>
+					<excludes>
+					<exclude>net/bytebuddy/**</exclude>
+					<exclude>com/openclassrooms/bobapp/data/JsonReader$MockitoMock*</exclude>
+					<exclude>com/openclassrooms/bobapp/service/JokeService$MockitoMock*</exclude>
+					<exclude>javax/sql/**</exclude>
+					<exclude>java/sql/**</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
