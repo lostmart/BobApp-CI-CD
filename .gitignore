@@ -22,6 +22,8 @@ coverage/
 *.iml
 *.ipr
 
+docs/*
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
