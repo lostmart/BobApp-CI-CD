@@ -107,20 +107,22 @@ jobs:
         run: |
           echo "Building frontend Docker image..."
 
-          # Build with latest tag
+          # Set timestamp once to avoid timing differences
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+
+          # Build image with latest tag first
           docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:latest .
 
-          # Build with commit SHA tag
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }} .
-
-          # Build with version tag (using timestamp)
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:v$(date +%Y%m%d-%H%M%S) .
+          # Create additional tags from the same image
+          docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:latest \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+          docker tag ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:latest \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:v${TIMESTAMP}
 
           echo "Pushing frontend images to Docker Hub..."
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:latest
           docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:v$(date +%Y%m%d-%H%M%S)
-
+          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.FRONTEND_IMAGE }}:v${TIMESTAMP}
           echo "Frontend images pushed successfully!"
 
       - name: Docker Image Information
