@@ -88,5 +88,5 @@ jobs:
           name: Backend Tests
           path: "back/target/surefire-reports/*.xml" # Use quotes for glob patterns
           reporter: java-junit
-          fail-on-error: false # Changed to false to not fail the workflow on test failures
-          fail-on-empty: false # Changed to false in case no tests exist yet
+          fail-on-error: false 
+          fail-on-empty: false 
