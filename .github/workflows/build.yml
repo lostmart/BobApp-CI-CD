@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
 
       - name: Set up JDK 11
         uses: actions/setup-java@v4
@@ -63,17 +63,54 @@ jobs:
           echo "Running frontend tests with coverage..."
           npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
 
-      # Backend: Build and analyze with SonarQube
-      - name: Build and analyze Backend
-        working-directory: ./back
+      # Create sonar-project.properties for unified analysis
+      - name: Create SonarQube Configuration
+        run: |
+          cat > sonar-project.properties << EOF
+          # Project identification
+          sonar.projectKey=lostmart_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD
+          sonar.projectName=BobApp Full Stack
+          sonar.projectVersion=1.0
+          sonar.organization=lostmart
+
+          # Source and test directories
+          sonar.sources=back/src/main,front/src/app
+          sonar.tests=back/src/test,front/src/app
+          sonar.test.inclusions=**/*Test.java,**/*.spec.ts
+
+          # Java configuration
+          sonar.java.source=11
+          sonar.java.binaries=back/target/classes
+          sonar.java.libraries=back/target/dependency/*.jar
+
+          # TypeScript/JavaScript configuration  
+          sonar.typescript.node=node
+
+          # Coverage reports
+          sonar.java.coveragePlugin=jacoco
+          sonar.coverage.jacoco.xmlReportPaths=back/target/site/jacoco/jacoco.xml
+          sonar.javascript.lcov.reportPaths=front/coverage/lcov.info
+
+          # Exclusions
+          sonar.coverage.exclusions=**/*.spec.ts,**/*.module.ts,**/main.ts,**/polyfills.ts,**/*Test.java,**/test/**
+          sonar.cpd.exclusions=**/*.spec.ts
+          EOF
+
+      # Unified SonarQube analysis
+      - name: SonarQube Analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
         run: |
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=lostmart_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+          # Install SonarQube Scanner
+          wget -O sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+          unzip -o sonar-scanner.zip
+          export PATH=$PATH:$(pwd)/sonar-scanner-4.8.0.2856-linux/bin
 
-      # Optional: Upload coverage reports as artifacts
+          # Run analysis
+          sonar-scanner
+
+      # Upload coverage reports as artifacts
       - name: Upload Backend Coverage
         uses: actions/upload-artifact@v4
         with:
@@ -87,3 +124,23 @@ jobs:
           name: frontend-coverage-report
           path: front/coverage/
           retention-days: 5
+
+      # Verify coverage files exist
+      - name: Verify Coverage Reports
+        run: |
+          echo "=== Backend Coverage ==="
+          if [ -f "back/target/site/jacoco/jacoco.xml" ]; then
+            echo "✅ Backend coverage found"
+            ls -la back/target/site/jacoco/
+          else
+            echo "❌ Backend coverage missing"
+          fi
+
+          echo "=== Frontend Coverage ==="
+          if [ -f "front/coverage/lcov.info" ]; then
+            echo "✅ Frontend coverage found"
+            ls -la front/coverage/
+          else
+            echo "❌ Frontend coverage missing"
+            find front -name "*coverage*" -type d -o -name "*.info" -type f | head -5
+          fi
