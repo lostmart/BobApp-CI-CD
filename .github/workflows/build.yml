@@ -45,18 +45,12 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # Backend: Copy dependencies and run tests with coverage
-      - name: Prepare Backend Dependencies and Run Tests
+      # Backend: Run tests with coverage and compile
+      - name: Build and Test Backend
         working-directory: ./back
         run: |
-          echo "Copying Maven dependencies..."
-          mvn dependency:copy-dependencies -DoutputDirectory=target/dependency
-          
           echo "Running backend tests with JaCoCo coverage..."
-          mvn clean test jacoco:report
-          
-          echo "Compiling classes..."
-          mvn compile
+          mvn clean compile test jacoco:report
 
       # Frontend: Install dependencies and run tests
       - name: Install Frontend Dependencies
@@ -75,14 +69,13 @@ jobs:
           echo "=== Backend artifacts ==="
           ls -la back/target/ || echo "No target directory"
           ls -la back/target/classes/ || echo "No classes directory"
-          ls -la back/target/dependency/ || echo "No dependency directory"
           find back -name "jacoco*" -type f | head -5
           
           echo "=== Frontend artifacts ==="
           find front -name "*coverage*" -type d | head -5
           find front -name "*.info" -type f | head -5
 
-      # Create sonar-project.properties for unified analysis
+      # Create sonar-project.properties WITHOUT java.libraries
       - name: Create SonarQube Configuration
         run: |
           cat > sonar-project.properties << EOF
@@ -100,7 +93,7 @@ jobs:
           # Java configuration
           sonar.java.source=11
           sonar.java.binaries=back/target/classes
-          sonar.java.libraries=back/target/dependency/*.jar
+          # REMOVED: sonar.java.libraries - let SonarQube auto-detect dependencies
 
           # Coverage reports
           sonar.coverage.jacoco.xmlReportPaths=back/target/site/jacoco/jacoco.xml
@@ -114,7 +107,7 @@ jobs:
           echo "=== Generated sonar-project.properties ==="
           cat sonar-project.properties
 
-      # Use the official SonarCloud GitHub Action (with new action name)
+      # Use the official SonarCloud GitHub Action
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v3.1.0
         env:
