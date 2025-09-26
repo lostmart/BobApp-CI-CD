@@ -45,12 +45,18 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # Backend: Run tests with coverage
-      - name: Run Backend Tests with Coverage
+      # Backend: Copy dependencies and run tests with coverage
+      - name: Prepare Backend Dependencies and Run Tests
         working-directory: ./back
         run: |
+          echo "Copying Maven dependencies..."
+          mvn dependency:copy-dependencies -DoutputDirectory=target/dependency
+          
           echo "Running backend tests with JaCoCo coverage..."
           mvn clean test jacoco:report
+          
+          echo "Compiling classes..."
+          mvn compile
 
       # Frontend: Install dependencies and run tests
       - name: Install Frontend Dependencies
@@ -63,14 +69,17 @@ jobs:
           echo "Running frontend tests with coverage..."
           npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
 
-      # Debug: Check what coverage files were generated
-      - name: Debug Coverage Files
+      # Debug: Check what was generated
+      - name: Debug Build Artifacts
         run: |
-          echo "=== Checking for coverage files ==="
-          echo "Backend coverage:"
+          echo "=== Backend artifacts ==="
+          ls -la back/target/ || echo "No target directory"
+          ls -la back/target/classes/ || echo "No classes directory"
+          ls -la back/target/dependency/ || echo "No dependency directory"
           find back -name "jacoco*" -type f | head -5
-          echo "Frontend coverage:"
-          find front -name "*coverage*" -type f | head -5
+          
+          echo "=== Frontend artifacts ==="
+          find front -name "*coverage*" -type d | head -5
           find front -name "*.info" -type f | head -5
 
       # Create sonar-project.properties for unified analysis
@@ -93,7 +102,7 @@ jobs:
           sonar.java.binaries=back/target/classes
           sonar.java.libraries=back/target/dependency/*.jar
 
-          # Coverage reports (check both possible locations)
+          # Coverage reports
           sonar.coverage.jacoco.xmlReportPaths=back/target/site/jacoco/jacoco.xml
           sonar.javascript.lcov.reportPaths=front/coverage/lcov.info
           sonar.typescript.lcov.reportPaths=front/coverage/lcov.info
@@ -101,18 +110,18 @@ jobs:
           # Exclusions from coverage
           sonar.coverage.exclusions=**/*.spec.ts,**/*.test.ts,**/*.module.ts,**/main.ts,**/polyfills.ts,**/*Test.java,**/test/**/*
           EOF
-
+          
           echo "=== Generated sonar-project.properties ==="
           cat sonar-project.properties
 
-      # Use the official SonarCloud GitHub Action
+      # Use the official SonarCloud GitHub Action (with new action name)
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v3.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      # Upload coverage reports as artifacts for debugging
+      # Upload coverage reports as artifacts
       - name: Upload Backend Coverage
         if: always()
         uses: actions/upload-artifact@v4
@@ -121,7 +130,7 @@ jobs:
           path: back/target/site/jacoco/
           retention-days: 5
 
-      - name: Upload Frontend Coverage
+      - name: Upload Frontend Coverage  
         if: always()
         uses: actions/upload-artifact@v4
         with:
