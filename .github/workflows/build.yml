@@ -63,6 +63,16 @@ jobs:
           echo "Running frontend tests with coverage..."
           npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
 
+      # Debug: Check what coverage files were generated
+      - name: Debug Coverage Files
+        run: |
+          echo "=== Checking for coverage files ==="
+          echo "Backend coverage:"
+          find back -name "jacoco*" -type f | head -5
+          echo "Frontend coverage:"
+          find front -name "*coverage*" -type f | head -5
+          find front -name "*.info" -type f | head -5
+
       # Create sonar-project.properties for unified analysis
       - name: Create SonarQube Configuration
         run: |
@@ -70,48 +80,41 @@ jobs:
           # Project identification
           sonar.projectKey=lostmart_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD
           sonar.projectName=BobApp Full Stack
-          sonar.projectVersion=1.0
           sonar.organization=lostmart
 
-          # Source and test directories
-          sonar.sources=back/src/main,front/src/app
-          sonar.tests=back/src/test,front/src/app
+          # Sources and tests
+          sonar.sources=back/src/main/java,front/src
+          sonar.tests=back/src/test,front/src
           sonar.test.inclusions=**/*Test.java,**/*.spec.ts
+          sonar.exclusions=**/node_modules/**,**/target/**,**/dist/**
 
           # Java configuration
           sonar.java.source=11
           sonar.java.binaries=back/target/classes
           sonar.java.libraries=back/target/dependency/*.jar
 
-          # TypeScript/JavaScript configuration  
-          sonar.typescript.node=node
-
-          # Coverage reports
-          sonar.java.coveragePlugin=jacoco
+          # Coverage reports (check both possible locations)
           sonar.coverage.jacoco.xmlReportPaths=back/target/site/jacoco/jacoco.xml
           sonar.javascript.lcov.reportPaths=front/coverage/lcov.info
+          sonar.typescript.lcov.reportPaths=front/coverage/lcov.info
 
-          # Exclusions
-          sonar.coverage.exclusions=**/*.spec.ts,**/*.module.ts,**/main.ts,**/polyfills.ts,**/*Test.java,**/test/**
-          sonar.cpd.exclusions=**/*.spec.ts
+          # Exclusions from coverage
+          sonar.coverage.exclusions=**/*.spec.ts,**/*.test.ts,**/*.module.ts,**/main.ts,**/polyfills.ts,**/*Test.java,**/test/**/*
           EOF
 
-      # Unified SonarQube analysis
-      - name: SonarQube Analysis
+          echo "=== Generated sonar-project.properties ==="
+          cat sonar-project.properties
+
+      # Use the official SonarCloud GitHub Action
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: https://sonarcloud.io
-        run: |
-          # Install SonarQube Scanner
-          wget -O sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
-          unzip -o sonar-scanner.zip
-          export PATH=$PATH:$(pwd)/sonar-scanner-4.8.0.2856-linux/bin
 
-          # Run analysis
-          sonar-scanner
-
-      # Upload coverage reports as artifacts
+      # Upload coverage reports as artifacts for debugging
       - name: Upload Backend Coverage
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: backend-coverage-report
@@ -119,28 +122,9 @@ jobs:
           retention-days: 5
 
       - name: Upload Frontend Coverage
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: frontend-coverage-report
           path: front/coverage/
           retention-days: 5
-
-      # Verify coverage files exist
-      - name: Verify Coverage Reports
-        run: |
-          echo "=== Backend Coverage ==="
-          if [ -f "back/target/site/jacoco/jacoco.xml" ]; then
-            echo "✅ Backend coverage found"
-            ls -la back/target/site/jacoco/
-          else
-            echo "❌ Backend coverage missing"
-          fi
-
-          echo "=== Frontend Coverage ==="
-          if [ -f "front/coverage/lcov.info" ]; then
-            echo "✅ Frontend coverage found"
-            ls -la front/coverage/
-          else
-            echo "❌ Frontend coverage missing"
-            find front -name "*coverage*" -type d -o -name "*.info" -type f | head -5
-          fi
