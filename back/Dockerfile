@@ -1,10 +1,49 @@
-FROM maven:3.6.3-jdk-11-slim AS build
-RUN mkdir -p /workspace
+# Multi-stage build for Spring Boot backend (Java 11)
+FROM eclipse-temurin:11-jdk AS build
+
+# Set working directory
 WORKDIR /workspace
-COPY pom.xml /workspace
-COPY src /workspace/src
-RUN mvn -B -f pom.xml clean package -DskipTests
-FROM openjdk:11-jdk-slim
+
+# Copy pom.xml first for better caching
+COPY pom.xml /workspace/
+
+# Copy Maven wrapper if it exists
+COPY .mvn /workspace/.mvn/
+COPY mvnw* /workspace/
+
+# Download dependencies
+RUN if [ -f "./mvnw" ]; then \
+      chmod +x ./mvnw && ./mvnw dependency:go-offline -B; \
+    else \
+      mvn dependency:go-offline -B; \
+    fi
+
+# Copy source code
+COPY src /workspace/src/
+
+# Build the application
+RUN if [ -f "./mvnw" ]; then \
+      ./mvnw clean package -DskipTests -B; \
+    else \
+      mvn clean package -DskipTests -B; \
+    fi
+
+# Production stage with Java 11 runtime
+FROM eclipse-temurin:11-jre AS production
+
+# Set working directory
+WORKDIR /app
+
+# Copy the built jar from build stage
 COPY --from=build /workspace/target/*.jar app.jar
+
+# Create non-root user for security
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+RUN chown appuser:appuser /app
+USER appuser
+
+# Expose port
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar","app.jar"]
+
+# Run the application
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
