@@ -1,6 +1,6 @@
 <!-- Live GitHub Actions Workflow Badges -->
 
-[![Build Status](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/docker-build-deploy.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/ci.yml)
+[![Build Status](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/docker-build-deploy.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/ci-cd-pipeline.yml)
 [![Tests](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml)
 
 [![Backend Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lostmart/YOUR_GIST_ID/raw/jacoco.json)](https://lostmart.github.io/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/)
