@@ -44,41 +44,46 @@ jobs:
           path: front/coverage/ # Path where Karma puts the coverage report
           retention-days: 5
 
-  # JOB: (Example) Run Backend Integration Tests
-  # backend-integration-tests:
-  #   name: Run Backend Integration Tests
-  #   runs-on: ubuntu-latest
-  #   needs: angular-unit-tests # Waits for the Angular tests to finish first
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-  #     - name: Set up JDK 17
-  #       uses: actions/setup-java@v3
-  #       with:
-  #         java-version: '17'
-  #         distribution: 'temurin'
-  #         cache: 'maven'
-  #     - name: Run Integration Tests with Maven
-  #       run: mvn verify -Dtest=**/*IntegrationTest.java --file api/pom.xml
-  #       # This is an example; you'd need a specific Maven profile or command to run only integration tests.
+backend-unit-tests:
+  name: Run Spring Boot Unit Tests
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-  # JOB: (Future Placeholder) Run End-to-End Tests with Playwright/Cypress
-  # e2e-tests:
-  #   name: Run E2E Tests
-  #   runs-on: ubuntu-latest
-  #   needs: angular-unit-tests # Ensures unit tests pass before running longer E2E tests
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: '18'
-  #     - name: Install dependencies
-  #       run: npm ci
-  #       working-directory: ./front
-  #     - name: Install Playwright
-  #       run: npx playwright install --with-deps
-  #       working-directory: ./front
-  #     - name: Run E2E Tests
-  #       run: npm run e2e # You would need to create this script first
-  #       working-directory: ./front
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: "17"
+        distribution: "temurin"
+        cache: "maven"
+
+    - name: Run Backend Tests
+      working-directory: ./back
+      run: |
+        echo "Running Spring Boot unit tests..."
+        mvn clean test
+        echo "Generating test reports..."
+        mvn surefire-report:report
+
+    - name: Generate JaCoCo Coverage Report
+      working-directory: ./back
+      run: mvn jacoco:report
+
+    - name: Upload Backend Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-test-results
+        path: |
+          back/target/surefire-reports/
+          back/target/site/jacoco/
+        retention-days: 5
+
+    - name: Publish Test Results
+      if: always()
+      uses: dorny/test-reporter@v1
+      with:
+        name: Backend Tests
+        path: back/target/surefire-reports/*.xml
+        reporter: java-junit
