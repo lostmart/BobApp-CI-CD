@@ -1,6 +1,6 @@
 <!-- Live GitHub Actions Workflow Badges -->
 
-[![Build Status](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/docker-build-deploy.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/ci-cd-pipeline.yml)
+[![Build Status](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/docker-build-deploy.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/build.yml)
 [![Tests](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml)
 
 [![Backend Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lostmart/YOUR_GIST_ID/raw/jacoco.json)](https://lostmart.github.io/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/)
@@ -8,11 +8,36 @@
 
 # BobApp
 
+Project: BobApp - L'application de joke par excellence !
+Course: Gérez un projet collaboratif en intégrant une démarche CI/CD
+
+This repository contains the complete CI/CD implementation for BobApp with the following GitHub Actions workflows:
+
+1. CI/CD WORKFLOW (docker-build-deploy.yml)
+
+   - Automated Docker build and deployment
+   - Multi-architecture support
+   - Security scanning with Trivy
+   - Deployment to Docker Hub
+
+2. TESTS WORKFLOW (tests.yml)
+
+   - Angular frontend unit tests with Karma
+   - Spring Boot backend unit tests
+   - Coverage report generation
+   - Test result publishing
+
+3. QUALITY WORKFLOW (build.yml)
+   - SonarQube code quality analysis
+   - Unified frontend and backend analysis
+   - Coverage integration
+   - Quality gates enforcement
+
+All workflows are configured with proper dependencies, caching, and error handling to ensure reliable CI/CD operations for BobApp.
+
 Clone project:
 
-> git clone XXXXX
-
-one of the ùmain issues
+> git clone https://github.com/lostmart/BobApp-CI-CD.git
 
 ## Front-end
 
