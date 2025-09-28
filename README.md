@@ -1,13 +1,10 @@
 <!-- Live GitHub Actions Workflow Badges -->
 
-<!-- Live GitHub Actions Workflow Badges -->
+[![Build Status](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/docker-build-deploy.yml/badge.svg)](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/build.yml)
+[![Tests](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml)
 
-[![Build Status](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/docker-build-deploy.yml/badge.svg)](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/docker-build-deploy.yml)
-[![Tests](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/tests.yml/badge.svg)](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/tests.yml)
-[![SonarQube](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/build.yml/badge.svg)](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/build.yml)
-
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lostmart_BobApp-CI-CD&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=lostmart_BobApp-CI-CD)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=lostmart_BobApp-CI-CD&metric=coverage)](https://sonarcloud.io/summary/new_code?id=lostmart_BobApp-CI-CD)
+[![Backend Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/lostmart/YOUR_GIST_ID/raw/jacoco.json)](https://lostmart.github.io/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/)
+[![Frontend Coverage](https://img.shields.io/codecov/c/github/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD)](https://codecov.io/gh/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD)
 
 # BobApp
 
