@@ -1,11 +1,11 @@
 <!-- Live GitHub Actions Workflow Badges -->
 
-[![Build Status](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/docker-build-deploy.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/docker-build-deploy.yml)
-[![Tests](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/tests.yml)
-[![SonarQube](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/build.yml/badge.svg)](https://github.com/lostmart/Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD/actions/workflows/build.yml)
+[![Build Status](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/docker-build-deploy.yml/badge.svg)](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/docker-build-deploy.yml)
+[![Tests](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/tests.yml/badge.svg)](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/tests.yml)
+[![SonarQube](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/build.yml/badge.svg)](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/build.yml)
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lostmart_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=lostmart_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=lostmart_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD&metric=coverage)](https://sonarcloud.io/summary/new_code?id=lostmart_Gerez-un-projet-collaboratif-en-int-grant-une-demarche-CI-CD)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lostmart_BobApp-CI-CD&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=lostmart_BobApp-CI-CD)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=lostmart_BobApp-CI-CD&metric=coverage)](https://sonarcloud.io/summary/new_code?id=lostmart_BobApp-CI-CD)
 
 # BobApp
 
