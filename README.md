@@ -1,5 +1,7 @@
 <!-- Live GitHub Actions Workflow Badges -->
 
+<!-- Live GitHub Actions Workflow Badges -->
+
 [![Build Status](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/docker-build-deploy.yml/badge.svg)](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/docker-build-deploy.yml)
 [![Tests](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/tests.yml/badge.svg)](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/tests.yml)
 [![SonarQube](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/build.yml/badge.svg)](https://github.com/lostmart/BobApp-CI-CD/actions/workflows/build.yml)
